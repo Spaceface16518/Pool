@@ -1,0 +1,24 @@
+[package]
+name = "pool"
+version = "0.1.0"
+authors = ["Spaceface16518 <33424649+Spaceface16518@users.noreply.github.com>"]
+edition = "2018"
+
+[dependencies]
+amethyst = "0.13.2"
+log = { version = "0.4.8", features = ["serde"] }
+
+[features]
+default = ["vulkan"]
+empty = ["amethyst/empty"]
+metal = ["amethyst/metal"]
+vulkan = ["amethyst/vulkan"]
+nightly = ["amethyst/nightly"]
+
+[profile.dev]
+codegen-units = 64
+
+[profile.release]
+codegen-units = 1
+lto = "fat"
+panic = "abort"
