@@ -15,6 +15,11 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
+    - name: Get Package
+      uses: mstksg/get-package@v1
+      with:
+        # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
+        apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
     - uses: actions/checkout@v2
     - name: Build release artifacts with vulkan backend
       run: cargo build --release --no-default-features --features vulkan
