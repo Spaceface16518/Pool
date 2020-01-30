@@ -9,6 +9,18 @@ pub struct ArenaBounds {
 }
 
 impl ArenaBounds {
+    pub const fn new_unchecked(width: f32, height: f32) -> Self {
+        ArenaBounds { width, height }
+    }
+
+    pub fn new(width: f32, height: f32) -> Option<Self> {
+        if width > 0.0 && height > 0.0 {
+            Some(ArenaBounds::new_unchecked(width, height))
+        } else {
+            None
+        }
+    }
+
     pub fn add_to_world(self, world: &mut World) {
         world.insert(self)
     }

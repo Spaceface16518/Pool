@@ -1,3 +1,3 @@
+mod arena;
 mod physics;
 mod systems;
-mod arena;

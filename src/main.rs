@@ -9,9 +9,9 @@ use amethyst::{
     utils::application_root_dir,
 };
 
-mod state;
 mod common;
 mod particles;
+mod state;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
