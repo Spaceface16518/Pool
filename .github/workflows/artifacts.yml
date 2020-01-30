@@ -1,0 +1,36 @@
+name: Artifacts
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  linux:
+    name: Linux build (vulkan)
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build release artifacts with vulkan backend
+      run: cargo build --release --no-default-features --features vulkan
+  
+  windows:
+    name: Windows build (vulkan)
+
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build release artifacts with vulkan backend
+      run: cargo build --release --no-default-features --features vulkan
+  
+  macos:
+    name: MacOS build (metal)
+    runs-on: macos-latest
+    
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build release artifacts with vulkan backend
+        run: cargo build --release --no-default-features --features metal
+
+# TODO: upload artifacts
