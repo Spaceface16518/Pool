@@ -3,13 +3,18 @@ name: Build and Test
 on: [push]
 
 jobs:
-  build:
+  linux-build:
+    name: Linux build (vulkan)
 
     # TODO: test multiple platforms
     # TODO: use actions-rs/cargo
     runs-on: ubuntu-latest
 
     steps:
+    - name: Get Package
+      uses: mstksg/get-package@v1
+      with:
+        apt-get: libasound2-dev
     - uses: actions/checkout@v2
     - name: Build
       run: cargo build --verbose
