@@ -86,7 +86,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust-toolchain: [stable, beta, nightly] 
+        rust-toolchain: [stable, nightly]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
