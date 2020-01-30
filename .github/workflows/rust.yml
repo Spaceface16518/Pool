@@ -43,10 +43,10 @@ jobs:
         rust-toolchain: [stable, beta, nightly]
     steps:
       - name: Get Package
-          uses: mstksg/get-package@v1
-          with:
-            # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
-            apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
+        uses: mstksg/get-package@v1
+        with:
+          # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
+          apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
@@ -66,10 +66,10 @@ jobs:
         rust-toolchain: [stable, beta, nightly]
     steps:
       - name: Get Package
-          uses: mstksg/get-package@v1
-          with:
-            # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
-            apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
+        uses: mstksg/get-package@v1
+        with:
+          # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
+          apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
@@ -109,10 +109,10 @@ jobs:
         rust-toolchain: [stable, beta, nightly] 
     steps:
       - name: Get Package
-          uses: mstksg/get-package@v1
-          with:
-            # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
-            apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
+        uses: mstksg/get-package@v1
+        with:
+          # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
+          apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
