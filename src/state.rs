@@ -5,7 +5,7 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     window::ScreenDimensions,
 };
-use rand::{Rng, thread_rng};
+use rand::{thread_rng, Rng};
 
 use crate::common::arena::ArenaBounds;
 use crate::particles::ParticlesConfig;
