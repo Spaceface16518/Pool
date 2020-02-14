@@ -6,6 +6,15 @@
       <sourceFolder url="file://$MODULE_DIR$/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior-loader/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior-loader/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior-loader/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/behavior/benches" isTestSource="true" />
+      <excludeFolder url="file://$MODULE_DIR$/behavior-loader/target" />
+      <excludeFolder url="file://$MODULE_DIR$/behavior/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />

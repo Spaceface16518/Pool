@@ -1,0 +1,11 @@
+[package]
+name = "pool-behavior"
+version = "0.1.0"
+authors = ["Spaceface16518 <33424649+Spaceface16518@users.noreply.github.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+pest = "2.1"
+pest_derive = "2.1"

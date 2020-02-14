@@ -1,0 +1,35 @@
+handler = { always_handler | conditional_handler}
+
+always_handler = { ^"always" ~ action_expression}
+conditional_handler = { ^"when" ~ condition_expression ~ ":" ~ ( (!";" ~action_expression) | ";")}
+
+target = { ^"siblings" | ^"strangers" | ^"food"}
+
+action_expression = { (action_clause ~ ";")* }
+
+action_clause = _{ (action ~ target) | unary_action }
+
+action = { ^"follow" | ^"flee" }
+unary_action = { ^"divide" }
+
+condition_expression = { condition_clause ~ (boolean_binop ~ condition_clause)*}
+
+condition_clause = _{ not_condition? ~ ((condition ~ target) | unary_condition)}
+
+condition = { ^"near" }
+
+unary_condition = { ^"hungry" }
+
+boolean_binop = _{ and_condition | or_condition | xor_condition }
+
+and_condition = { ^"and" }
+
+or_condition = { ^"or" }
+
+xor_condition = { ^"xor" }
+
+not_condition = { ^"not" }
+
+WHITESPACE = { " " | "\t" | NEWLINE} // TODO: revise whitespace rules
+
+COMMENT = _{ "/*" ~ (!"*/" ~ ANY)* ~ "*/" }
