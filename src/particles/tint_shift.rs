@@ -19,7 +19,7 @@ impl TintShiftDirection {
     pub fn toggle(&mut self) {
         *self = match self {
             TintShiftDirection::Up => TintShiftDirection::Down,
-            TintShiftDirection::Down => TintShiftDirection::Up
+            TintShiftDirection::Down => TintShiftDirection::Up,
         }
     }
 
@@ -59,9 +59,11 @@ impl<'a> System<'a> for TintShiftSystem {
     type SystemData = (WriteStorage<'a, Tint>, WriteStorage<'a, TintShiftDirection>);
 
     fn run(&mut self, (mut tints, mut tint_shift_directions): Self::SystemData) {
-        (&mut tints, &mut tint_shift_directions).join().for_each(|(tint, tint_shift_direction)| {
-            let ref mut alpha_channel = tint.0.alpha;
-            tint_shift_direction.shift_alpha(alpha_channel)
-        })
+        (&mut tints, &mut tint_shift_directions)
+            .join()
+            .for_each(|(tint, tint_shift_direction)| {
+                let alpha_channel = &mut tint.0.alpha;
+                tint_shift_direction.shift_alpha(alpha_channel)
+            })
     }
 }

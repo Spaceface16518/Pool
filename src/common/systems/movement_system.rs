@@ -1,6 +1,4 @@
-use amethyst::{
-    core::Transform, ecs::Join, ecs::ReadStorage, ecs::System, ecs::WriteStorage,
-};
+use amethyst::{core::Transform, ecs::Join, ecs::ReadStorage, ecs::System, ecs::WriteStorage};
 
 use crate::common::physics::velocity::Velocity;
 

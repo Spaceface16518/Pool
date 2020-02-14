@@ -25,15 +25,15 @@ impl ArenaBounds {
         world.insert(self)
     }
 
-    pub const fn width(&self) -> f32 {
+    pub const fn width(self) -> f32 {
         self.width
     }
 
-    pub const fn height(&self) -> f32 {
+    pub const fn height(self) -> f32 {
         self.height
     }
 
-    pub fn vector(&self) -> Vector2<f32> {
+    pub fn vector(self) -> Vector2<f32> {
         Vector2::new(self.width, self.height)
     }
 }

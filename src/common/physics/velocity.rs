@@ -10,7 +10,7 @@ impl Velocity {
     }
 
     pub fn get(&self) -> Vector3<f32> {
-        self.0.clone()
+        self.0
     }
 }
 

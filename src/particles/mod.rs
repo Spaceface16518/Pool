@@ -34,11 +34,16 @@ pub struct ParticlesConfig<'rng, R> {
 impl<'rng, R: Rng> ParticlesConfig<'rng, R> {
     pub fn add_to_world(self, world: &mut World) {
         (0..self.count).for_each(|_| {
-            world.create_entity()
+            world
+                .create_entity()
                 .with(random_transform(self.rng, self.bounds))
                 .with(random_initial_tint(self.rng))
                 .with(random_tint_direction(self.rng))
-                .with(random_particle_velocity(self.rng, self.velocity_middle, self.velocity_maximum_percent_variation))
+                .with(random_particle_velocity(
+                    self.rng,
+                    self.velocity_middle,
+                    self.velocity_maximum_percent_variation,
+                ))
                 .with(self.sprite_render.clone())
                 .build();
         })
@@ -54,7 +59,11 @@ fn random_transform(rng: &mut (impl Rng + ?Sized), bounds: ArenaBounds) -> Trans
     transform
 }
 
-fn random_particle_velocity(rng: &mut (impl Rng + ?Sized), middle: f32, max_percent_variation: f32) -> Velocity {
+fn random_particle_velocity(
+    rng: &mut (impl Rng + ?Sized),
+    middle: f32,
+    max_percent_variation: f32,
+) -> Velocity {
     // yes i know, grow up
     let mut v_gen = || {
         let i = middle + rng.gen_range(-max_percent_variation, max_percent_variation);

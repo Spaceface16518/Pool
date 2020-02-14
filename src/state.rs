@@ -39,30 +39,30 @@ impl SimpleState for GameState {
         // more game object initializations go here
     }
 
-//    fn handle_event(
-//        &mut self,
-//        mut _data: StateData<'_, GameData<'_, '_>>,
-//        event: StateEvent,
-//    ) -> SimpleTrans {
-//        if let StateEvent::Window(event) = &event {
-//            // Check if the window should be closed
-//            if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
-//                return Trans::Quit;
-//            }
-//
-//            // Listen to any key events
-//            if let Some(event) = get_key(&event) {
-//                info!("handling key event: {:?}", event);
-//            }
-//
-//            // If you're looking for a more sophisticated event handling solution,
-//            // including key bindings and gamepad support, please have a look at
-//            // https://book.amethyst.rs/stable/pong-tutorial/pong-tutorial-03.html#capturing-user-input
-//        }
-//
-//        // Keep going
-//        Trans::None
-//    }
+    //    fn handle_event(
+    //        &mut self,
+    //        mut _data: StateData<'_, GameData<'_, '_>>,
+    //        event: StateEvent,
+    //    ) -> SimpleTrans {
+    //        if let StateEvent::Window(event) = &event {
+    //            // Check if the window should be closed
+    //            if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
+    //                return Trans::Quit;
+    //            }
+    //
+    //            // Listen to any key events
+    //            if let Some(event) = get_key(&event) {
+    //                info!("handling key event: {:?}", event);
+    //            }
+    //
+    //            // If you're looking for a more sophisticated event handling solution,
+    //            // including key bindings and gamepad support, please have a look at
+    //            // https://book.amethyst.rs/stable/pong-tutorial/pong-tutorial-03.html#capturing-user-input
+    //        }
+    //
+    //        // Keep going
+    //        Trans::None
+    //    }
 }
 
 fn init_camera(world: &mut World, dimensions: &ScreenDimensions) {
@@ -97,23 +97,19 @@ fn load_sprite_visuals(world: &mut World) -> Handle<SpriteSheet> {
 
     // Load the spritesheet definition file, which contains metadata on our
     // spritesheet texture.
-    let sheet_handle = {
-        let loader = world.read_resource::<Loader>();
-        let sheet_storage = world.read_resource::<AssetStorage<SpriteSheet>>();
-        loader.load(
-            "sprite_sheet.ron",
-            SpriteSheetFormat(texture_handle),
-            (),
-            &sheet_storage,
-        )
-    };
-
-    sheet_handle
+    let loader = world.read_resource::<Loader>();
+    let sheet_storage = world.read_resource::<AssetStorage<SpriteSheet>>();
+    loader.load(
+        "sprite_sheet.ron",
+        SpriteSheetFormat(texture_handle),
+        (),
+        &sheet_storage,
+    )
 }
 
 fn init_particles(world: &mut World, rng: &mut impl Rng, sheet_handle: Handle<SpriteSheet>) {
     let particles = ParticlesConfig {
-        rng: rng,
+        rng,
         bounds: *world.read_resource::<ArenaBounds>(),
         velocity_middle: 10.0,
         velocity_maximum_percent_variation: 0.5,
