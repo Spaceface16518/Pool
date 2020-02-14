@@ -1,13 +1,15 @@
+use std::ops::{Div, Mul};
+
 use amethyst::core::math::Vector2;
 use amethyst::prelude::World;
-use amethyst::prelude::WorldExt;
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 pub struct ArenaBounds {
     width: f32,
     height: f32,
 }
 
+#[allow(dead_code)]
 impl ArenaBounds {
     pub const fn new_unchecked(width: f32, height: f32) -> Self {
         ArenaBounds { width, height }
@@ -35,5 +37,39 @@ impl ArenaBounds {
 
     pub fn vector(self) -> Vector2<f32> {
         Vector2::new(self.width, self.height)
+    }
+}
+
+impl Mul<f32> for ArenaBounds {
+    type Output = ArenaBounds;
+
+    fn mul(self, ratio: f32) -> Self::Output {
+        ArenaBounds {
+            width: self.width * ratio,
+            height: self.height * ratio,
+        }
+    }
+}
+
+impl Div<f32> for ArenaBounds {
+    type Output = ArenaBounds;
+
+    fn div(self, ratio: f32) -> Self::Output {
+        ArenaBounds {
+            width: self.width / ratio,
+            height: self.height / ratio,
+        }
+    }
+}
+
+impl From<(f32, f32)> for ArenaBounds {
+    fn from((width, height): (f32, f32)) -> Self {
+        ArenaBounds { width, height }
+    }
+}
+
+impl Into<(f32, f32)> for ArenaBounds {
+    fn into(self) -> (f32, f32) {
+        (self.width, self.height)
     }
 }

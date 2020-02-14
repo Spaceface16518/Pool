@@ -5,7 +5,7 @@ use amethyst::{
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     window::ScreenDimensions,
 };
-use rand::{thread_rng, Rng};
+use rand::{Rng, thread_rng};
 
 use crate::common::arena::ArenaBounds;
 use crate::particles::ParticlesConfig;
@@ -20,14 +20,11 @@ impl SimpleState for GameState {
         let world = data.world;
         let mut rng = thread_rng();
 
-        // Get the screen dimensions so we can initialize the camera and
-        // place our sprites correctly later. We'll clone this since we'll
-        // pass the world mutably to the following functions.
-        // TODO: use actual bounds instead of screen based bounds
-        let dimensions = (*world.read_resource::<ScreenDimensions>()).clone();
+        // Define the bounds of the arena
+        init_arena(world);
 
         // Place the camera
-        init_camera(world, &dimensions);
+        init_camera(world);
 
         // Load our sprites and display them
         let sprites = load_sprite_visuals(world);
@@ -61,17 +58,34 @@ impl SimpleState for GameState {
     //    }
 }
 
-fn init_camera(world: &mut World, dimensions: &ScreenDimensions) {
-    // FIXME: fix camera for new bounds
-    // TODO: add camera controls
-    // Center the camera in the middle of the screen, and let it cover
-    // the entire screen
-    let mut transform = Transform::default();
-    transform.set_translation_xyz(dimensions.width() * 0.5, dimensions.height() * 0.5, 1.);
+fn init_arena(world: &mut World) {
+    const DEFAULT_WIDTH: f32 = 1000.0;
+    const DEFAULT_HEIGHT: f32 = 1000.0;
+    let arena = ArenaBounds::new(DEFAULT_WIDTH, DEFAULT_HEIGHT).unwrap();
+    world.insert(arena)
+}
+
+fn init_camera(world: &mut World) {
+    let (viewport_width, viewport_height) = {
+        let screen_dimensions = (*world.read_resource::<ScreenDimensions>()).clone();
+        let h = 200.0 * screen_dimensions.hidpi_factor() as f32;
+        let w = h * screen_dimensions.aspect_ratio();
+        (w, h)
+    };
+
+    let transform = {
+        let arena_bounds = *world.read_resource::<ArenaBounds>();
+        let midpoint = arena_bounds / 2.0;
+        let mut transform = Transform::default();
+        transform
+            .set_translation_x(midpoint.width())
+            .set_translation_y(midpoint.height());
+        transform
+    };
 
     world
         .create_entity()
-        .with(Camera::standard_2d(dimensions.width(), dimensions.height()))
+        .with(Camera::standard_2d(viewport_width, viewport_height))
         .with(transform)
         .build();
 }

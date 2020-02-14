@@ -52,7 +52,10 @@ fn random_transform(rng: &mut (impl Rng + ?Sized), bounds: ArenaBounds) -> Trans
     let y = rng.gen_range(0.0, bounds.height());
 
     let mut transform = Transform::default();
-    transform.set_translation_x(x).set_translation_y(y);
+    transform
+        .set_translation_x(x)
+        .set_translation_y(y)
+        .set_scale([10.0; 3].into());
     transform
 }
 
