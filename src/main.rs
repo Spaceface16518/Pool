@@ -3,8 +3,8 @@ use amethyst::{
     prelude::*,
     renderer::{
         plugins::{RenderFlat2D, RenderToWindow},
-        RenderingBundle,
         types::DefaultBackend,
+        RenderingBundle,
     },
     utils::application_root_dir,
 };

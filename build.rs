@@ -3,8 +3,8 @@ use std::error::Error;
 use std::fs::File;
 use std::io::Write;
 
-use image::{ImageError, Pixel, RgbaImage};
 use image::Rgba;
+use image::{ImageError, Pixel, RgbaImage};
 use sheep::{AmethystFormat, InputSprite, SimplePacker};
 
 fn main() -> Result<(), Box<dyn Error>> {
@@ -22,7 +22,7 @@ fn main() -> Result<(), Box<dyn Error>> {
         sprite_sheet.dimensions.1,
         sprite_sheet.bytes,
     )
-        .ok_or_else(|| "Could not construct sprite sheet from bytes".to_owned())?;
+    .ok_or_else(|| "Could not construct sprite sheet from bytes".to_owned())?;
 
     outbuf.save("resources/sprite_sheet.png")?;
 
