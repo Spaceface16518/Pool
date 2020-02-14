@@ -1,6 +1,5 @@
 use amethyst::ecs::Component;
 use amethyst::ecs::Join;
-use amethyst::ecs::ParJoin;
 use amethyst::ecs::System;
 use amethyst::ecs::VecStorage;
 use amethyst::ecs::WriteStorage;

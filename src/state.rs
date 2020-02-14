@@ -1,14 +1,10 @@
-use std::borrow::Borrow;
-
 use amethyst::{
     assets::{AssetStorage, Handle, Loader},
     core::transform::Transform,
-    input::{get_key, is_close_requested, is_key_down, VirtualKeyCode},
     prelude::*,
     renderer::{Camera, ImageFormat, SpriteRender, SpriteSheet, SpriteSheetFormat, Texture},
     window::ScreenDimensions,
 };
-use log::info;
 use rand::{Rng, thread_rng};
 
 use crate::common::arena::ArenaBounds;

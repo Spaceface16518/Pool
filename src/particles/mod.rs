@@ -1,8 +1,5 @@
-use std::convert::TryInto;
-
 use amethyst::core::Transform;
 use amethyst::ecs::Component;
-use amethyst::ecs::Entity;
 use amethyst::ecs::VecStorage;
 use amethyst::prelude::{Builder, World, WorldExt};
 use amethyst::renderer::palette::Srgba;
