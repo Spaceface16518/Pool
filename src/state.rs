@@ -1,5 +1,7 @@
+use std::borrow::Borrow;
+
 use amethyst::{
-    assets::{AssetStorage, Loader},
+    assets::{AssetStorage, Handle, Loader},
     core::transform::Transform,
     input::{get_key, is_close_requested, is_key_down, VirtualKeyCode},
     prelude::*,
@@ -7,56 +9,65 @@ use amethyst::{
     window::ScreenDimensions,
 };
 use log::info;
+use rand::{Rng, thread_rng};
 
-pub struct MyState;
+use crate::common::arena::ArenaBounds;
+use crate::particles::ParticlesConfig;
 
-impl SimpleState for MyState {
+pub struct GameState;
+
+impl SimpleState for GameState {
     // On start will run when this state is initialized. For more
     // state lifecycle hooks, see:
     // https://book.amethyst.rs/stable/concepts/state.html#life-cycle
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
+        let mut rng = thread_rng();
 
         // Get the screen dimensions so we can initialize the camera and
         // place our sprites correctly later. We'll clone this since we'll
         // pass the world mutably to the following functions.
+        // TODO: use actual bounds instead of screen based bounds
         let dimensions = (*world.read_resource::<ScreenDimensions>()).clone();
 
         // Place the camera
         init_camera(world, &dimensions);
 
         // Load our sprites and display them
-        let sprites = load_sprites(world);
-        init_sprites(world, &sprites, &dimensions);
+        let sprites = load_sprite_visuals(world);
+        init_particles(world, &mut rng, sprites);
+        // more game object initializations go here
     }
 
-    fn handle_event(
-        &mut self,
-        mut _data: StateData<'_, GameData<'_, '_>>,
-        event: StateEvent,
-    ) -> SimpleTrans {
-        if let StateEvent::Window(event) = &event {
-            // Check if the window should be closed
-            if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
-                return Trans::Quit;
-            }
-
-            // Listen to any key events
-            if let Some(event) = get_key(&event) {
-                info!("handling key event: {:?}", event);
-            }
-
-            // If you're looking for a more sophisticated event handling solution,
-            // including key bindings and gamepad support, please have a look at
-            // https://book.amethyst.rs/stable/pong-tutorial/pong-tutorial-03.html#capturing-user-input
-        }
-
-        // Keep going
-        Trans::None
-    }
+//    fn handle_event(
+//        &mut self,
+//        mut _data: StateData<'_, GameData<'_, '_>>,
+//        event: StateEvent,
+//    ) -> SimpleTrans {
+//        if let StateEvent::Window(event) = &event {
+//            // Check if the window should be closed
+//            if is_close_requested(&event) || is_key_down(&event, VirtualKeyCode::Escape) {
+//                return Trans::Quit;
+//            }
+//
+//            // Listen to any key events
+//            if let Some(event) = get_key(&event) {
+//                info!("handling key event: {:?}", event);
+//            }
+//
+//            // If you're looking for a more sophisticated event handling solution,
+//            // including key bindings and gamepad support, please have a look at
+//            // https://book.amethyst.rs/stable/pong-tutorial/pong-tutorial-03.html#capturing-user-input
+//        }
+//
+//        // Keep going
+//        Trans::None
+//    }
 }
 
 fn init_camera(world: &mut World, dimensions: &ScreenDimensions) {
+    // FIXME: fix camera for new bounds
+    // TODO: add camera controls
     // Center the camera in the middle of the screen, and let it cover
     // the entire screen
     let mut transform = Transform::default();
@@ -69,7 +80,7 @@ fn init_camera(world: &mut World, dimensions: &ScreenDimensions) {
         .build();
 }
 
-fn load_sprites(world: &mut World) -> Vec<SpriteRender> {
+fn load_sprite_visuals(world: &mut World) -> Handle<SpriteSheet> {
     // Load the texture for our sprites. We'll later need to
     // add a handle to this texture to our `SpriteRender`s, so
     // we need to keep a reference to it.
@@ -77,7 +88,7 @@ fn load_sprites(world: &mut World) -> Vec<SpriteRender> {
         let loader = world.read_resource::<Loader>();
         let texture_storage = world.read_resource::<AssetStorage<Texture>>();
         loader.load(
-            "sprites/logo.png",
+            "sprite_sheet.png",
             ImageFormat::default(),
             (),
             &texture_storage,
@@ -90,40 +101,28 @@ fn load_sprites(world: &mut World) -> Vec<SpriteRender> {
         let loader = world.read_resource::<Loader>();
         let sheet_storage = world.read_resource::<AssetStorage<SpriteSheet>>();
         loader.load(
-            "sprites/logo.ron",
+            "sprite_sheet.ron",
             SpriteSheetFormat(texture_handle),
             (),
             &sheet_storage,
         )
     };
 
-    // Create our sprite renders. Each will have a handle to the texture
-    // that it renders from. The handle is safe to clone, since it just
-    // references the asset.
-    (0..3)
-        .map(|i| SpriteRender {
-            sprite_sheet: sheet_handle.clone(),
-            sprite_number: i,
-        })
-        .collect()
+    sheet_handle
 }
 
-fn init_sprites(world: &mut World, sprites: &[SpriteRender], dimensions: &ScreenDimensions) {
-    for (i, sprite) in sprites.iter().enumerate() {
-        // Center our sprites around the center of the window
-        let x = (i as f32 - 1.) * 100. + dimensions.width() * 0.5;
-        let y = (i as f32 - 1.) * 100. + dimensions.height() * 0.5;
-        let mut transform = Transform::default();
-        transform.set_translation_xyz(x, y, 0.);
+fn init_particles(world: &mut World, rng: &mut impl Rng, sheet_handle: Handle<SpriteSheet>) {
+    let particles = ParticlesConfig {
+        rng: rng,
+        bounds: *world.read_resource::<ArenaBounds>(),
+        velocity_middle: 10.0,
+        velocity_maximum_percent_variation: 0.5,
+        sprite_render: SpriteRender {
+            sprite_sheet: sheet_handle,
+            sprite_number: 0,
+        },
+        count: 10,
+    };
 
-        // Create an entity for each sprite and attach the `SpriteRender` as
-        // well as the transform. If you want to add behaviour to your sprites,
-        // you'll want to add a custom `Component` that will identify them, and a
-        // `System` that will iterate over them. See https://book.amethyst.rs/stable/concepts/system.html
-        world
-            .create_entity()
-            .with(sprite.clone())
-            .with(transform)
-            .build();
-    }
+    particles.add_to_world(world);
 }

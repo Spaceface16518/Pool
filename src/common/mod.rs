@@ -1,3 +1,3 @@
-mod arena;
-mod physics;
-mod systems;
+pub mod arena;
+pub mod physics;
+pub mod systems;
