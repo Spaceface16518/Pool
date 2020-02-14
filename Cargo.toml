@@ -23,7 +23,7 @@ default = ["empty"]
 empty = ["amethyst/empty"]
 metal = ["amethyst/metal"]
 vulkan = ["amethyst/vulkan"]
-nightly = ["amethyst/nightly"]
+#nightly = ["amethyst/nightly"]
 
 [profile.dev]
 codegen-units = 48
