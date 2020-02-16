@@ -2,6 +2,7 @@ use amethyst::core::math::Vector3;
 use amethyst::ecs::Component;
 use amethyst::ecs::VecStorage;
 
+#[derive(Clone, PartialEq, Debug)]
 pub struct Velocity(Vector3<f32>);
 
 impl Velocity {
@@ -9,8 +10,8 @@ impl Velocity {
         Velocity(Vector3::new(x, y, 0.0))
     }
 
-    pub fn get(&self) -> Vector3<f32> {
-        self.0
+    pub fn vector(&self) -> &Vector3<f32> {
+        &self.0
     }
 }
 
