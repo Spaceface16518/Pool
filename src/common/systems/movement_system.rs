@@ -11,7 +11,7 @@ impl<'a> System<'a> for MovementSystem {
         (&mut transforms, &velocities)
             .join()
             .for_each(|(transform, velocity)| {
-                transform.append_translation(velocity.get());
+                transform.append_translation(velocity.vector());
             })
     }
 }
