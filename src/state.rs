@@ -67,11 +67,13 @@ fn init_arena(world: &mut World) {
 fn init_camera(world: &mut World) {
     let (viewport_width, viewport_height) = {
         let screen_dimensions = (*world.read_resource::<ScreenDimensions>()).clone();
-        let h = 200.0 * screen_dimensions.hidpi_factor() as f32;
-        let w = h * screen_dimensions.aspect_ratio();
+        // FIXME: do we need to multiply by hidpi factor?
+        let h = 200.0 * screen_dimensions.hidpi_factor() as f32; // height is 200 units
+        let w = h * screen_dimensions.aspect_ratio(); //  `a = w / h` so `w = h * a`
         (w, h)
     };
 
+    // init camera in the middle of the arena
     let transform = {
         let arena_bounds = *world.read_resource::<ArenaBounds>();
         let midpoint = arena_bounds / 2.0;
