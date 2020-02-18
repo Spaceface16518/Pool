@@ -7,8 +7,7 @@ use amethyst::{
 };
 use rand::{Rng, thread_rng};
 
-use crate::common::arena::ArenaBounds;
-use crate::particles::ParticlesConfig;
+use crate::{common::arena::ArenaBounds, particles::ParticlesConfig};
 
 pub struct GameState;
 
@@ -58,6 +57,7 @@ impl SimpleState for GameState {
     //    }
 }
 
+#[cold]
 fn init_arena(world: &mut World) {
     const DEFAULT_WIDTH: f32 = 1000.0;
     const DEFAULT_HEIGHT: f32 = 1000.0;
@@ -65,6 +65,7 @@ fn init_arena(world: &mut World) {
     world.insert(arena)
 }
 
+#[cold]
 fn init_camera(world: &mut World) {
     let (viewport_width, viewport_height) = {
         let screen_dimensions = (*world.read_resource::<ScreenDimensions>()).clone();
@@ -90,6 +91,7 @@ fn init_camera(world: &mut World) {
         .build();
 }
 
+#[cold]
 fn load_sprite_visuals(world: &mut World) -> Handle<SpriteSheet> {
     // Load the texture for our sprites. We'll later need to
     // add a handle to this texture to our `SpriteRender`s, so
@@ -117,6 +119,7 @@ fn load_sprite_visuals(world: &mut World) -> Handle<SpriteSheet> {
     )
 }
 
+#[cold]
 fn init_particles(world: &mut World, rng: &mut impl Rng, sheet_handle: Handle<SpriteSheet>) {
     let particles = ParticlesConfig {
         rng,
