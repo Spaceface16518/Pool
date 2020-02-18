@@ -3,11 +3,13 @@ use amethyst::{
     prelude::*,
     renderer::{
         plugins::{RenderFlat2D, RenderToWindow},
-        types::DefaultBackend,
         RenderingBundle,
+        types::DefaultBackend,
     },
     utils::application_root_dir,
 };
+
+use crate::{common::physics::velocity::MovementSystem, particles::tint_shift::TintShiftSystem};
 
 mod common;
 mod particles;
@@ -27,10 +29,12 @@ fn main() -> amethyst::Result<()> {
             RenderingBundle::<DefaultBackend>::new()
                 .with_plugin(
                     RenderToWindow::from_config_path(display_config)?
-                        .with_clear([0.0, 0.0, 0.0, 0.0]),
+                        .with_clear([0.0, 0.0, 0.0, 1.0]),
                 )
                 .with_plugin(RenderFlat2D::default()),
-        )?;
+        )?
+        .with(MovementSystem, "movement_system", &[])
+        .with(TintShiftSystem, "tint_shift_system", &[]);
 
     let mut game = Application::new(resources, state::GameState, game_data)?;
     game.run();

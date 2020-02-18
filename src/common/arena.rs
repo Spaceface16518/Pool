@@ -1,7 +1,6 @@
 use std::ops::{Div, Mul};
 
-use amethyst::core::math::Vector2;
-use amethyst::prelude::World;
+use amethyst::{core::math::Vector2, prelude::World};
 
 #[derive(Copy, Clone, PartialEq)]
 pub struct ArenaBounds {

@@ -1,10 +1,6 @@
-use std::convert::TryInto;
-use std::error::Error;
-use std::fs::File;
-use std::io::Write;
+use std::{convert::TryInto, error::Error, fs::File, io::Write};
 
-use image::Rgba;
-use image::{ImageError, Pixel, RgbaImage};
+use image::{ImageError, Pixel, Rgba, RgbaImage};
 use sheep::{AmethystFormat, InputSprite, SimplePacker};
 
 fn main() -> Result<(), Box<dyn Error>> {

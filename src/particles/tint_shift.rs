@@ -1,9 +1,7 @@
-use amethyst::ecs::Component;
-use amethyst::ecs::Join;
-use amethyst::ecs::System;
-use amethyst::ecs::VecStorage;
-use amethyst::ecs::WriteStorage;
-use amethyst::renderer::resources::Tint;
+use amethyst::{
+    ecs::{Component, Join, System, VecStorage, WriteStorage},
+    renderer::resources::Tint,
+};
 use rand::Rng;
 
 #[derive(Clone, Eq, PartialEq, Debug)]

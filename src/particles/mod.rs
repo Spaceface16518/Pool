@@ -1,19 +1,25 @@
-use amethyst::core::Transform;
-use amethyst::ecs::Component;
-use amethyst::ecs::VecStorage;
-use amethyst::prelude::{Builder, World, WorldExt};
-use amethyst::renderer::palette::Srgba;
-use amethyst::renderer::resources::Tint;
-use amethyst::renderer::SpriteRender;
+use amethyst::{
+    core::Transform,
+    ecs::{Component, VecStorage},
+    prelude::{Builder, World, WorldExt},
+    renderer::{palette::Srgba, resources::Tint, SpriteRender},
+};
 use rand::Rng;
 
-use crate::common::arena::ArenaBounds;
-use crate::common::physics::velocity::Velocity;
-use crate::particles::tint_shift::random_tint_direction;
+use crate::{
+    common::{arena::ArenaBounds, physics::velocity::Velocity},
+    particles::tint_shift::random_tint_direction,
+};
+use crate::particles::collider::ParticleCollider;
 
+pub mod collider;
 pub mod tint_shift;
 
 pub struct Particle;
+
+impl Particle {
+    const RADIUS: f32 = 5.0;
+}
 
 impl Component for Particle {
     type Storage = VecStorage<Self>;
@@ -41,6 +47,7 @@ impl<'rng, R: Rng> ParticlesConfig<'rng, R> {
                     self.velocity_middle,
                     self.velocity_maximum_percent_variation,
                 ))
+                .with(ParticleCollider::new(Particle::RADIUS))
                 .with(self.sprite_render.clone())
                 .build();
         })
@@ -55,7 +62,8 @@ fn random_transform(rng: &mut (impl Rng + ?Sized), bounds: ArenaBounds) -> Trans
     transform
         .set_translation_x(x)
         .set_translation_y(y)
-        .set_scale([10.0; 3].into());
+        // FIXME: should z be 0.0 or 1.0?
+        .set_scale([Particle::RADIUS * 2.0, Particle::RADIUS * 2.0, 0.0].into());
     transform
 }
 
