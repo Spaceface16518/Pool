@@ -9,7 +9,10 @@ use amethyst::{
     utils::application_root_dir,
 };
 
-use crate::{common::physics::velocity::MovementSystem, particles::tint_shift::TintShiftSystem};
+use crate::{
+    common::physics::velocity::MovementSystem,
+    particles::{collider::ParticleCollisionSystem, tint_shift::TintShiftSystem},
+};
 
 mod common;
 mod particles;
@@ -34,6 +37,11 @@ fn main() -> amethyst::Result<()> {
                 .with_plugin(RenderFlat2D::default()),
         )?
         .with(MovementSystem, "movement_system", &[])
+        .with(
+            ParticleCollisionSystem,
+            "particle_collision_system",
+            &["movement_system"],
+        )
         .with(TintShiftSystem, "tint_shift_system", &[]);
 
     let mut game = Application::new(resources, state::GameState, game_data)?;

@@ -8,9 +8,8 @@ use rand::Rng;
 
 use crate::{
     common::{arena::ArenaBounds, physics::velocity::Velocity},
-    particles::tint_shift::random_tint_direction,
+    particles::{collider::ParticleCollider, tint_shift::random_tint_direction},
 };
-use crate::particles::collider::ParticleCollider;
 
 pub mod collider;
 pub mod tint_shift;
@@ -39,15 +38,21 @@ impl<'rng, R: Rng> ParticlesConfig<'rng, R> {
         (0..self.count).for_each(|_| {
             world
                 .create_entity()
+                // position
                 .with(random_transform(self.rng, self.bounds))
+                // tint
                 .with(random_initial_tint(self.rng))
+                // tint shift direction
                 .with(random_tint_direction(self.rng))
+                // velocity
                 .with(random_particle_velocity(
                     self.rng,
                     self.velocity_middle,
                     self.velocity_maximum_percent_variation,
                 ))
+                // collider
                 .with(ParticleCollider::new(Particle::RADIUS))
+                // visual
                 .with(self.sprite_render.clone())
                 .build();
         })

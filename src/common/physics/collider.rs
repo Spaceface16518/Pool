@@ -12,9 +12,7 @@ impl Collider {
     }
 
     pub const fn new(radius: f32) -> Self {
-        Collider {
-            radius
-        }
+        Collider { radius }
     }
 }
 

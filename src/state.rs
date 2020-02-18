@@ -12,9 +12,7 @@ use crate::{common::arena::ArenaBounds, particles::ParticlesConfig};
 pub struct GameState;
 
 impl SimpleState for GameState {
-    // On start will run when this state is initialized. For more
-    // state lifecycle hooks, see:
-    // https://book.amethyst.rs/stable/concepts/state.html#life-cycle
+    #[cold]
     fn on_start(&mut self, data: StateData<'_, GameData<'_, '_>>) {
         let world = data.world;
         let mut rng = thread_rng();
@@ -80,7 +78,8 @@ fn init_camera(world: &mut World) {
         let mut transform = Transform::default();
         transform
             .set_translation_x(midpoint.width())
-            .set_translation_y(midpoint.height());
+            .set_translation_y(midpoint.height())
+            .set_translation_z(10.0);
         transform
     };
 

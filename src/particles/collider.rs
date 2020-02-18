@@ -27,9 +27,9 @@ impl Component for ParticleCollider {
     type Storage = VecStorage<Self>;
 }
 
-pub struct WrapSystem;
+pub struct ParticleCollisionSystem;
 
-impl<'s> System<'s> for WrapSystem {
+impl<'s> System<'s> for ParticleCollisionSystem {
     type SystemData = (
         ReadExpect<'s, ArenaBounds>,
         ReadStorage<'s, ParticleCollider>,
