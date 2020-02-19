@@ -1,6 +1,8 @@
 use amethyst::{
     core::Transform,
-    ecs::{Component, Join, ReadExpect, ReadStorage, System, VecStorage, WriteStorage},
+    ecs::{
+        Component, Join, ReadExpect, ReadStorage, RunningTime, System, VecStorage, WriteStorage,
+    },
 };
 
 use crate::common::{
@@ -58,5 +60,9 @@ impl<'s> System<'s> for ParticleCollisionSystem {
                 }
             },
         )
+    }
+
+    fn running_time(&self) -> RunningTime {
+        RunningTime::Average
     }
 }

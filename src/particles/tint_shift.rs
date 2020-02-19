@@ -1,6 +1,7 @@
 use amethyst::{
-    ecs::{Component, Join, System, VecStorage, WriteStorage},
-    renderer::resources::Tint,
+    core::timing::Time,
+    ecs::{Component, Join, Read, RunningTime, System, VecStorage, WriteStorage},
+    renderer::{palette::rgb::Rgb, resources::Tint},
 };
 use rand::Rng;
 
@@ -11,31 +12,32 @@ pub enum TintShiftDirection {
 }
 
 impl TintShiftDirection {
-    pub const TINT_SHIFT: f32 = 0.03;
+    pub const TINT_SHIFT: f32 = 0.1;
 
-    pub fn toggle(&mut self) {
-        *self = match self {
-            TintShiftDirection::Up => TintShiftDirection::Down,
-            TintShiftDirection::Down => TintShiftDirection::Up,
-        }
-    }
-
-    pub fn shift_alpha(&mut self, alpha_channel: &mut f32) {
+    pub fn shift(&mut self, rgb: &mut Rgb, fixed_seconds: f32) {
         match self {
             TintShiftDirection::Up => {
-                *alpha_channel += TintShiftDirection::TINT_SHIFT;
-                if *alpha_channel >= 1.0 {
-                    self.toggle()
+                let shifted = rgb.red + TintShiftDirection::TINT_SHIFT * fixed_seconds;
+                assign_all_channels(rgb, shifted);
+                if shifted >= 1.0 {
+                    *self = TintShiftDirection::Down;
                 }
             }
             TintShiftDirection::Down => {
-                *alpha_channel -= TintShiftDirection::TINT_SHIFT;
-                if *alpha_channel <= 0.0 {
-                    self.toggle()
+                let shifted = rgb.red - TintShiftDirection::TINT_SHIFT * fixed_seconds;
+                assign_all_channels(rgb, shifted);
+                if shifted <= 0.0 {
+                    *self = TintShiftDirection::Up;
                 }
             }
         };
     }
+}
+
+fn assign_all_channels(rgb: &mut Rgb, val: f32) {
+    rgb.red = val;
+    rgb.blue = val;
+    rgb.green = val;
 }
 
 impl Component for TintShiftDirection {
@@ -53,14 +55,21 @@ pub fn random_tint_direction(rng: &mut (impl Rng + ?Sized)) -> TintShiftDirectio
 pub struct TintShiftSystem;
 
 impl<'a> System<'a> for TintShiftSystem {
-    type SystemData = (WriteStorage<'a, Tint>, WriteStorage<'a, TintShiftDirection>);
+    type SystemData = (
+        WriteStorage<'a, Tint>,
+        WriteStorage<'a, TintShiftDirection>,
+        Read<'a, Time>,
+    );
 
-    fn run(&mut self, (mut tints, mut tint_shift_directions): Self::SystemData) {
+    fn run(&mut self, (mut tints, mut tint_shift_directions, time): Self::SystemData) {
         (&mut tints, &mut tint_shift_directions)
             .join()
             .for_each(|(tint, tint_shift_direction)| {
-                let alpha_channel = &mut tint.0.alpha;
-                tint_shift_direction.shift_alpha(alpha_channel)
+                tint_shift_direction.shift(&mut tint.0.color, time.delta_seconds())
             })
+    }
+
+    fn running_time(&self) -> RunningTime {
+        RunningTime::Average
     }
 }

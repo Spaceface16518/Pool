@@ -1,4 +1,5 @@
 pub mod arena;
+pub mod camera;
 pub mod physics;
 
 // TODO: make the negative and positive methods better

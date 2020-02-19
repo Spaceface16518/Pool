@@ -2,7 +2,7 @@ use std::ops::Mul;
 
 use amethyst::{
     core::{timing::Time, Transform},
-    ecs::{Component, Join, Read, ReadStorage, System, VecStorage, WriteStorage},
+    ecs::{Component, Join, Read, ReadStorage, RunningTime, System, VecStorage, WriteStorage},
 };
 
 #[derive(Clone, PartialEq, Debug, Default)]
@@ -49,5 +49,9 @@ impl<'a> System<'a> for MovementSystem {
                 transform.prepend_translation_x(x);
                 transform.prepend_translation_y(y);
             })
+    }
+
+    fn running_time(&self) -> RunningTime {
+        RunningTime::Long
     }
 }

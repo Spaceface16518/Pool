@@ -62,13 +62,14 @@ impl<'rng, R: Rng> ParticlesConfig<'rng, R> {
 fn random_transform(rng: &mut (impl Rng + ?Sized), bounds: ArenaBounds) -> Transform {
     let x = rng.gen_range(0.0, bounds.width());
     let y = rng.gen_range(0.0, bounds.height());
+    let actual_dim = |texture_dim| Particle::RADIUS / texture_dim;
 
     let mut transform = Transform::default();
     transform
         .set_translation_x(x)
         .set_translation_y(y)
         // FIXME: should z be 0.0 or 1.0?
-        .set_scale([Particle::RADIUS * 2.0, Particle::RADIUS * 2.0, 0.0].into());
+        .set_scale([actual_dim(256.0), actual_dim(256.0), 0.0].into());
     transform
 }
 
@@ -91,5 +92,6 @@ fn random_particle_velocity(
 }
 
 fn random_initial_tint(rng: &mut (impl Rng + ?Sized)) -> Tint {
-    Tint(Srgba::new(1.0, 1.0, 1.0, rng.gen_range(0f32, 1f32)))
+    let tint = rng.gen_range(0f32, 1f32);
+    Tint(Srgba::new(tint, tint, tint, 1.0))
 }
