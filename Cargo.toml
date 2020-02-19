@@ -24,6 +24,7 @@ empty = ["amethyst/empty"]
 metal = ["amethyst/metal"]
 vulkan = ["amethyst/vulkan"]
 #nightly = ["amethyst/nightly"]
+no-slow-safety-checks = ["amethyst/no-slow-safety-checks"]
 
 [profile.dev]
 codegen-units = 48
