@@ -94,7 +94,7 @@ pub fn init_camera(world: &mut World) {
         .with(transform)
         .build();
 
-    world.insert(ActiveCamera::new(camera))
+    ActiveCamera::new(camera).add_to_world(world)
 }
 #[cold]
 fn load_sprite_visuals(world: &mut World) -> Handle<SpriteSheet> {
