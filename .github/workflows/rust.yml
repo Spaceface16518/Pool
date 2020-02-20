@@ -11,10 +11,14 @@ jobs:
     name: Build
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest]
-        backend: [vulkan]
-        include:
-          - os: macos
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        backend: [vulkan, metal]
+        exclude:
+          - os: macos-latest
+            backend: vulkan
+          - os: ubuntu-latest
+            backend: metal
+          - os: windows-latest
             backend: metal
 
     # TODO: test multiple platforms
