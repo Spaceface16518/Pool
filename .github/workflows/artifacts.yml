@@ -22,7 +22,7 @@ jobs:
         apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
     - uses: actions/checkout@v2
     - name: Build release artifacts with vulkan backend
-      run: cargo build --release --no-default-features --features vulkan
+      run: cargo build --release --no-default-features --features="vulkan no-slow-safety-checks"
   
   windows:
     name: Windows build (vulkan)
@@ -31,7 +31,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Build release artifacts with vulkan backend
-      run: cargo build --release --no-default-features --features vulkan
+      run: cargo build --release --no-default-features --features="vulkan no-slow-safety-checks"
   
   macos:
     name: MacOS build (metal)
@@ -40,6 +40,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build release artifacts with vulkan backend
-        run: cargo build --release --no-default-features --features metal
+        run: cargo build --release --no-default-features --features="metal no-slow-safety-checks"
 
 # TODO: upload artifacts
