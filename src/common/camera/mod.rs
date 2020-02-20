@@ -1,13 +1,9 @@
-
 use amethyst::{
-    ecs::{
-         Entity,
-    },
+    ecs::Entity,
     prelude::{StateEvent, World, WorldExt},
     renderer::{camera::Projection, Camera},
     winit::{dpi::LogicalSize, Event, WindowEvent},
 };
-
 
 fn projection(width: f32, height: f32) -> Projection {
     // ripped from Camera::standard_2d
