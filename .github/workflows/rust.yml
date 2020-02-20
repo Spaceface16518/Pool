@@ -7,12 +7,20 @@ on:
       - 'LICENSE'
 
 jobs:
-  linux-build:
-    name: Linux build (vulkan)
+  build:
+    name: Build
+    strategy:
+      matrix:
+        rust: [stable, beta, nightly]
+        os: [ubuntu-latest, windows-latest]
+        backend: [vulkan]
+        include:
+          - os: macos
+            backend: metal
 
     # TODO: test multiple platforms
     # TODO: use actions-rs/cargo
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
 
     steps:
     - name: Get Package
@@ -21,26 +29,23 @@ jobs:
         # dependencies found at https://github.com/amethyst/amethyst/blob/master/README.md#debianubuntu
         apt-get: gcc pkg-config openssl libasound2-dev cmake build-essential python3 libfreetype6-dev libexpat1-dev libxcb-composite0-dev libssl-dev libx11-dev
     - uses: actions/checkout@v2
-    - name: Build
-      run: cargo build --verbose
-    - name: Run tests
-      run: cargo test --verbose
     - uses: actions-rs/toolchain@v1
       with:
         profile: minimal
-        toolchain: stable
+        toolchain: ${{ matrix.rust }}
         override: true
     - uses: actions-rs/cargo@v1
       with:
+        toolchain: ${{ matrix.rust }}
         command: build
-        args: --verbose
+        args: --verbose --feature ${{ matrix.backend }}
 
   check:
     name: Check
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust-toolchain: [stable, beta, nightly]
+        rust: [stable, beta, nightly]
     steps:
       - name: Get Package
         uses: mstksg/get-package@v1
@@ -51,11 +56,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           command: check
 
   test:
@@ -63,7 +68,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust-toolchain: [stable, beta, nightly]
+        rust: [stable, beta, nightly]
     steps:
       - name: Get Package
         uses: mstksg/get-package@v1
@@ -74,11 +79,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           override: true
       - uses: actions-rs/cargo@v1
         with:
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           command: test
 
   fmt:
@@ -86,18 +91,18 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust-toolchain: [stable, nightly]
+        rust: [stable, nightly]
     steps:
       - uses: actions/checkout@v2
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           override: true
           components: rustfmt
       - uses: actions-rs/cargo@v1
         with:
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           command: fmt
           args: --all -- --check
 
@@ -106,7 +111,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        rust-toolchain: [stable, beta, nightly] 
+        rust: [stable, beta, nightly] 
     steps:
       - name: Get Package
         uses: mstksg/get-package@v1
@@ -117,11 +122,11 @@ jobs:
       - uses: actions-rs/toolchain@v1
         with:
           profile: minimal
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           override: true
           components: clippy
       - uses: actions-rs/cargo@v1
         with:
-          toolchain: ${{ matrix.rust-toolchain }}
+          toolchain: ${{ matrix.rust }}
           command: clippy
           args: -- -D warnings
