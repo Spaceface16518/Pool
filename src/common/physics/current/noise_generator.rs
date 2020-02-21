@@ -2,7 +2,10 @@ use noise::{NoiseFn, Seedable};
 use std::time::Duration;
 
 #[derive(Default, Clone)]
-pub struct NoiseGenerator<MagnitudeGenerator: NoiseFn<[f64; 3]>, DirectionGenerator: NoiseFn<[f64; 3]>> {
+pub struct NoiseGenerator<
+    MagnitudeGenerator: NoiseFn<[f64; 3]>,
+    DirectionGenerator: NoiseFn<[f64; 3]>,
+> {
     magnitude: MagnitudeGenerator,
     direction: DirectionGenerator,
 }
@@ -26,6 +29,7 @@ impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
 impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
     /// Makes a new `NoiseGenerator` from two noise functions.
     #[cold]
+    #[allow(dead_code)]
     pub fn new(magnitude: M, direction: D) -> Self {
         NoiseGenerator {
             magnitude,
@@ -34,9 +38,12 @@ impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
     }
 }
 
-impl<M: Default + Seedable + NoiseFn<[f64; 3]>, D: Default + Seedable + NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
+impl<M: Default + Seedable + NoiseFn<[f64; 3]>, D: Default + Seedable + NoiseFn<[f64; 3]>>
+    NoiseGenerator<M, D>
+{
     /// Prefer this method if you don't need to customize the generators
     #[cold]
+    #[allow(dead_code)]
     pub fn default_seeded(magnitude_seed: u32, direction_seed: u32) -> Self {
         NoiseGenerator::new(
             M::default().set_seed(magnitude_seed),
