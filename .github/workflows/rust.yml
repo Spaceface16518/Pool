@@ -65,6 +65,7 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
           command: check
+          args: --verbose
 
   test:
     name: Test Suite
@@ -88,6 +89,7 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
           command: test
+          args: --all --verbose
 
   fmt:
     name: Rustfmt
@@ -107,7 +109,7 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
           command: fmt
-          args: --all -- --check
+          args: --verbose --all -- --check
 
   clippy:
     name: Clippy
@@ -132,4 +134,4 @@ jobs:
         with:
           toolchain: ${{ matrix.rust }}
           command: clippy
-          args: -- -D warnings
+          args: --verbose -- -D warnings
