@@ -7,8 +7,11 @@ edition = "2018"
 #[workspace]
 #members = ["behavior"]
 
+[dependencies.amethyst]
+git = "https://github.com/amethyst/amethyst/"
+rev = "d64745079e9ded753e3a05200ea32f2b31b370ef"
+
 [dependencies]
-amethyst = { git = "https://github.com/amethyst/amethyst/"}
 log = { version = "0.4.8", features = ["serde"] }
 rand = "0.7.3"
 noise = "0.6.0"
