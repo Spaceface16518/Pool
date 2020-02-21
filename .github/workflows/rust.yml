@@ -41,7 +41,7 @@ jobs:
       with:
         toolchain: stable
         command: build
-        args: --verbose --features ${{ matrix.backend }}
+        args: --verbose --no-default-features --features ${{ matrix.backend }}
 
   check:
     name: Check
