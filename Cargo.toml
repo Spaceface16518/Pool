@@ -16,11 +16,6 @@ log = { version = "0.4.8", features = ["serde"] }
 rand = "0.7.3"
 noise = "0.6.0"
 
-[build-dependencies]
-image = "0.23.0"
-sheep = "0.3.0"
-ron = "0.5.1"
-
 [features]
 default = ["empty"]
 empty = ["amethyst/empty"]
