@@ -17,6 +17,8 @@ use crate::{
 mod common;
 mod particles;
 mod state;
+mod cells;
+mod event;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());
