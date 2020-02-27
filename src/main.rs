@@ -17,9 +17,7 @@ use crate::{
     particles::{collider::ParticleCollisionSystem, tint_shift::TintShiftSystem},
 };
 
-mod cells;
 mod common;
-mod event;
 mod particles;
 mod state;
 
