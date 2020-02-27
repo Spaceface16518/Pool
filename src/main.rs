@@ -16,7 +16,6 @@ use crate::{
 
 mod cells;
 mod common;
-mod event;
 mod particles;
 mod state;
 
