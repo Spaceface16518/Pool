@@ -21,7 +21,7 @@ impl Particle {
 }
 
 impl Component for Particle {
-    type Storage = VecStorage<Self>;
+    type Storage = NullStorage<Self>;
 }
 
 pub struct ParticlesConfig<'rng, R> {
