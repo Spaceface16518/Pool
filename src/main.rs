@@ -14,11 +14,11 @@ use crate::{
     particles::{collider::ParticleCollisionSystem, tint_shift::TintShiftSystem},
 };
 
+mod cells;
 mod common;
+mod event;
 mod particles;
 mod state;
-mod cells;
-mod event;
 
 fn main() -> amethyst::Result<()> {
     amethyst::start_logger(Default::default());

@@ -1,3 +1,5 @@
+#![allow(unused)]
+
 use amethyst::{
     ecs::{Component, Entity, NullStorage},
     prelude::{Builder, World, WorldExt},
