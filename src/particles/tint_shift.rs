@@ -12,7 +12,7 @@ pub enum TintShiftDirection {
 }
 
 impl TintShiftDirection {
-    pub const TINT_SHIFT: f32 = 0.1;
+    pub const TINT_SHIFT: f32 = 0.3;
 
     pub fn shift(&mut self, rgb: &mut Rgb, fixed_seconds: f32) {
         match self {

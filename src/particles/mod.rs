@@ -1,23 +1,30 @@
 use amethyst::{
     core::Transform,
-    ecs::{Component, VecStorage},
+    ecs::{Component, NullStorage},
     prelude::{Builder, World, WorldExt},
     renderer::{palette::Srgba, resources::Tint, SpriteRender},
 };
 use rand::Rng;
 
 use crate::{
-    common::{arena::ArenaBounds, physics::velocity::Velocity},
+    common::{
+        arena::ArenaBounds,
+        physics::{
+            current::{drag::DragProfile, mass::InertialMass},
+            velocity::Velocity,
+        },
+    },
     particles::{collider::ParticleCollider, tint_shift::random_tint_direction},
 };
 
 pub mod collider;
 pub mod tint_shift;
 
+#[derive(Copy, Clone, Debug, Default)]
 pub struct Particle;
 
 impl Particle {
-    const RADIUS: f32 = 5.0;
+    const RADIUS: f32 = 2.5;
 }
 
 impl Component for Particle {
@@ -52,6 +59,10 @@ impl<'rng, R: Rng> ParticlesConfig<'rng, R> {
                 ))
                 // collider
                 .with(ParticleCollider::new(Particle::RADIUS))
+                // inertial mass
+                .with(InertialMass(0.1))
+                // drag profile
+                .with(DragProfile(0.01))
                 // visual
                 .with(self.sprite_render.clone())
                 .build();

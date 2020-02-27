@@ -15,6 +15,11 @@ impl Velocity {
     pub fn new(x: f32, y: f32) -> Self {
         Velocity { x, y }
     }
+
+    pub fn map_each<F: Fn(f32) -> f32>(&mut self, f: F) {
+        self.x = f(self.x);
+        self.y = f(self.y);
+    }
 }
 
 impl Component for Velocity {

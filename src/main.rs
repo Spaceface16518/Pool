@@ -10,11 +10,16 @@ use amethyst::{
 };
 
 use crate::{
-    common::physics::velocity::MovementSystem,
+    common::physics::{
+        current::{drag::DragSystem, CurrentSystem},
+        velocity::MovementSystem,
+    },
     particles::{collider::ParticleCollisionSystem, tint_shift::TintShiftSystem},
 };
 
+mod cells;
 mod common;
+mod event;
 mod particles;
 mod state;
 
@@ -42,6 +47,8 @@ fn main() -> amethyst::Result<()> {
             "particle_collision_system",
             &["movement_system"],
         )
+        .with(CurrentSystem, "current_system", &["movement_system"])
+        .with(DragSystem, "drag_system", &["movement_system"])
         .with(TintShiftSystem, "tint_shift_system", &[]);
 
     let mut game = Application::new(resources, state::GameState, game_data)?;

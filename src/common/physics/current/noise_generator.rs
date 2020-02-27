@@ -1,36 +1,36 @@
-use noise::{NoiseFn, Seedable};
-use std::time::Duration;
+use amethyst::prelude::World;
+use noise::{NoiseFn, Perlin, Seedable};
+
+// TODO: caching
 
 #[derive(Default, Clone)]
-pub struct NoiseGenerator<
-    MagnitudeGenerator: NoiseFn<[f64; 3]>,
-    DirectionGenerator: NoiseFn<[f64; 3]>,
-> {
-    magnitude: MagnitudeGenerator,
-    direction: DirectionGenerator,
+pub struct NoiseGenerator {
+    magnitude: Perlin,
+    direction: Perlin,
 }
 
-impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
-    /// Gets the magnitude at a certain location (`x`, `y`), and a certain time `t`.
+impl NoiseGenerator {
+    /// Gets the magnitude at a certain location (`x`, `y`)
     #[inline]
-    pub fn direction(&self, x: f32, y: f32, t: Duration) -> f32 {
-        self.direction.get([x as f64, y as f64, t.as_secs_f64()]) as f32
+    pub fn direction(&self, x: f32, y: f32) -> f32 {
+        self.direction.get([x as f64, y as f64]) as f32
     }
 }
 
-impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
-    /// Gets the magnitude at a certain location (`x`, `y`), and a certain time `t`.
+impl NoiseGenerator {
+    /// Gets the magnitude at a certain location (`x`, `y`)
     #[inline]
-    pub fn magnitude(&self, x: f32, y: f32, t: Duration) -> f32 {
-        self.magnitude.get([x as f64, y as f64, t.as_secs_f64()]) as f32
+    pub fn magnitude(&self, x: f32, y: f32) -> f32 {
+        // FIXME: use fastest simplification
+        self.magnitude.get([x.round() as f64, y.round() as f64]) as f32
     }
 }
 
-impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
+impl NoiseGenerator {
     /// Makes a new `NoiseGenerator` from two noise functions.
     #[cold]
     #[allow(dead_code)]
-    pub fn new(magnitude: M, direction: D) -> Self {
+    pub fn new(magnitude: Perlin, direction: Perlin) -> Self {
         NoiseGenerator {
             magnitude,
             direction,
@@ -38,16 +38,20 @@ impl<M: NoiseFn<[f64; 3]>, D: NoiseFn<[f64; 3]>> NoiseGenerator<M, D> {
     }
 }
 
-impl<M: Default + Seedable + NoiseFn<[f64; 3]>, D: Default + Seedable + NoiseFn<[f64; 3]>>
-    NoiseGenerator<M, D>
-{
+impl NoiseGenerator {
+    pub fn add_to_world(self, world: &mut World) {
+        world.insert(self)
+    }
+}
+
+impl NoiseGenerator {
     /// Prefer this method if you don't need to customize the generators
     #[cold]
     #[allow(dead_code)]
     pub fn default_seeded(magnitude_seed: u32, direction_seed: u32) -> Self {
         NoiseGenerator::new(
-            M::default().set_seed(magnitude_seed),
-            D::default().set_seed(direction_seed),
+            Perlin::default().set_seed(magnitude_seed),
+            Perlin::default().set_seed(direction_seed),
         )
     }
 }

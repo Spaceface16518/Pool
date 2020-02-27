@@ -12,6 +12,7 @@ use crate::{
     common::{
         arena::ArenaBounds,
         camera::{handle_camera_resize, ActiveCamera},
+        physics::current::noise_generator::NoiseGenerator,
     },
     particles::ParticlesConfig,
 };
@@ -26,6 +27,7 @@ impl SimpleState for GameState {
 
         // Define the bounds of the arena
         init_arena(world);
+        init_currents(world, &mut rng);
 
         // Place the camera
         init_camera(world);
@@ -61,7 +63,7 @@ impl SimpleState for GameState {
 #[cold]
 fn init_arena(world: &mut World) {
     const DEFAULT_WIDTH: f32 = 1000.0;
-    const DEFAULT_HEIGHT: f32 = 1000.0;
+    const DEFAULT_HEIGHT: f32 = 500.0;
     let arena = ArenaBounds::new(DEFAULT_WIDTH, DEFAULT_HEIGHT).unwrap();
     world.insert(arena)
 }
@@ -139,4 +141,8 @@ fn init_particles(world: &mut World, rng: &mut impl Rng, sheet_handle: Handle<Sp
     };
 
     particles.add_to_world(world);
+}
+
+pub fn init_currents(world: &mut World, rng: &mut impl Rng) {
+    NoiseGenerator::default_seeded(rng.gen::<u32>(), rng.gen::<u32>()).add_to_world(world)
 }
