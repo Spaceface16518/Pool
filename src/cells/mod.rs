@@ -5,7 +5,10 @@ use amethyst::{
     prelude::{Builder, World, WorldExt},
 };
 
-use crate::cells::{name::Name, score::Score, size::InitialSize};
+use crate::{
+    cells::{name::Name, score::Score, size::InitialSize},
+    common::physics::velocity::Velocity,
+};
 
 mod event_handler;
 mod name;
@@ -22,7 +25,7 @@ impl Component for Cell {
 pub struct CellBuilder {
     pub name: Option<String>,
     pub initial_radius: f32,
-    pub initial_score: usize,
+    pub initial_score: u32,
 }
 
 impl Default for CellBuilder {
@@ -41,10 +44,12 @@ impl CellBuilder {
             .create_entity()
             .with(Cell)
             .with(InitialSize::new(self.initial_radius))
-            .with(Score(self.initial_score));
+            .with(Score::new(self.initial_score));
+        // TODO: add other non-original Cell components
+        // TODO: add sprite stuff to Cell
 
         if let Some(name) = self.name {
-            builder = builder.with(Name(name));
+            builder = builder.with(Name::new(name));
         }
 
         builder.build()
